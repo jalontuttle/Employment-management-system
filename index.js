@@ -83,3 +83,26 @@ function addEmployee() {
     })
 }
 
+function viewDept() {
+    db.query('SELECT * FROM department', (err, data) => {
+          if(err) throw err;
+          console.table(data);
+          menu();
+    })
+ }
+ 
+ function addDept() {
+     inquirer.prompt({
+         type: 'input',
+         name: 'newDept',
+         message: 'What new department would you like to add?',
+     })
+     .then((answers) => {
+         db.query(`INSERT INTO department (name) VALUES ('${answers.newDept}')`), (err) => {
+             if (err) throw err;
+             console.log('New department created');
+             menu();
+         }
+     }) 
+ }
+ 
