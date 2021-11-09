@@ -29,11 +29,11 @@ inquirer
             name: 'init',
             type: 'list',
             message: 'What would you like to do?',
-            choices: ['Add Employee', 'Update Employee Role', 'View All Employees', 'Add Role', 'View All Departments', 'Add Department', 'Quit'],
+            choices: ['Add Employee', 'View All Employees', 'Add Role', 'View All Departments', 'Add Department', 'Quit'],
         },
     ])
     .then((answers) => {
-        console.log(answers);
+        // console.log(answers);
         if(answers.init === 'Add Employee') {
             addEmployee();
         }else if (answers.init === 'View All Departments') {
@@ -44,9 +44,8 @@ inquirer
             addRole();
         }else if(answers.init === 'View All Employees') {
             viewEmplyees();
-        }else if (answers.init === 'Update Employee Role') {
-            updateRole();
         } else {
+            finish();
         }
     })
 }
@@ -75,12 +74,18 @@ function addEmployee() {
     },
     ])
     .then((answers) => {
-        db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${answers.firstName}', '${answers.lastName}', ${answers.role}, ${answers.manager})`), (err) => {
-            if (err) throw err;
-            console.log('New associate added');
+        // console.log(answers);
+        let query = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${answers.firstName}', '${answers.lastName}', '${answers.role}', '${answers.manager}');`;
+        db.promise().query(query).then(function(err, res){
+            if(err){
+                // console.error(err);
+            }
+            // console.log(res);
+            console.log('Employee Added Successfully');
             menu();
-        }
-    })
+        });
+
+    });
 }
 
 function viewDept() {
@@ -98,11 +103,15 @@ function viewDept() {
          message: 'What new department would you like to add?',
      })
      .then((answers) => {
-         db.query(`INSERT INTO department (name) VALUES ('${answers.newDept}')`), (err) => {
-             if (err) throw err;
-             console.log('New department created');
-             menu();
-         }
+         let query = `INSERT INTO department (name) VALUES ('${answers.newDept}')`;
+         db.promise().query(query).then(function(err, res){
+            if(err){
+                // console.error(err);
+            }
+            // console.log(res);
+            console.log('Department Added Successfully');
+            menu();
+        });
      }) 
  }
  
@@ -125,11 +134,15 @@ function viewDept() {
      },
      ])
      .then((answers) => {
-         db.query(`INSERT INTO role (title, salary, department_id) VALUES ('${answers.newRole}', ${answers.salary}, ${answers.department})`), (err) => {
-             if (err) throw err;
-             console.log('New Role created');
-             menu();
-         }
+         let query = `INSERT INTO roles (title, salary, department_id) VALUES ('${answers.newRole}', ${answers.salary}, ${answers.department})`;
+         db.promise().query(query).then(function(err, res){
+            if(err){
+                // console.error(err);
+            }
+            // console.log(res);
+            console.log('Role Added Successfully');
+            menu();
+        });
      }) 
  }
  
@@ -141,6 +154,6 @@ function viewDept() {
    })
  }
  
- function updateRole() {
- 
+ function finish() {
+    console.log('Thank You. Goodbye :)')
  }
