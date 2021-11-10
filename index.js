@@ -29,7 +29,7 @@ inquirer
             name: 'init',
             type: 'list',
             message: 'What would you like to do?',
-            choices: ['Add Employee', 'View All Employees', 'Add Role', 'View All Departments', 'Add Department', 'Quit'],
+            choices: ['Add Employee', 'View All Employees', 'View All Roles', 'Add Role', 'View All Departments', 'Add Department', 'Quit'],
         },
     ])
     .then((answers) => {
@@ -44,7 +44,9 @@ inquirer
             addRole();
         }else if(answers.init === 'View All Employees') {
             viewEmplyees();
-        } else {
+        }else if(answers.init === 'View All Roles') {
+            viewRoles();
+        }else {
             finish();
         }
     })
@@ -152,6 +154,14 @@ function viewDept() {
          console.table(data);
          menu();
    })
+ }
+
+ function viewRoles() {
+    db.query('SELECT * FROM roles', (err, data) => {
+        if(err) throw err;
+        console.table(data);
+        menu();
+  })
  }
  
  function finish() {
